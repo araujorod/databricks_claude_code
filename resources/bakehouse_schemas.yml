@@ -1,0 +1,19 @@
+# One schema per medallion layer. These resources are the single source of
+# truth for the layer names: the pipeline configuration points at
+# ${resources.schemas.<layer>.name}, so the names are never retyped anywhere.
+resources:
+  schemas:
+    bronze:
+      catalog_name: ${var.catalog}
+      name: bronze
+      comment: Raw ingestion of samples.bakehouse, with ingestion metadata.
+
+    silver:
+      catalog_name: ${var.catalog}
+      name: silver
+      comment: Cleaned and conformed Bakehouse data with data-quality expectations.
+
+    gold:
+      catalog_name: ${var.catalog}
+      name: gold
+      comment: Business-ready marts powering the Bakehouse AI/BI dashboard.

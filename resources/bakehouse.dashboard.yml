@@ -1,0 +1,13 @@
+# AI/BI (Lakeview) dashboard over the gold layer.
+# The dashboard JSON contains only BARE table names. The catalog and schema are
+# injected here from the bundle: the catalog from ${var.catalog} and the schema
+# from the schema resource itself, so the dashboard follows the target it is
+# deployed to without a single environment name inside the JSON.
+resources:
+  dashboards:
+    bakehouse_dashboard:
+      display_name: Bakehouse - Visao Executiva
+      file_path: ../src/dashboards/bakehouse.lvdash.json
+      warehouse_id: ${var.warehouse_id}
+      dataset_catalog: ${var.catalog}
+      dataset_schema: ${resources.schemas.gold.name}

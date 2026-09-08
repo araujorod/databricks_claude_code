@@ -1,0 +1,20 @@
+# A single serverless Lakeflow Declarative Pipeline covering all three layers.
+# The catalog and the three schema names reach the SQL files through
+# 'configuration', so no transformation ever hardcodes an environment.
+resources:
+  pipelines:
+    bakehouse_medallion:
+      name: bakehouse_medallion
+      catalog: ${var.catalog}
+      schema: ${resources.schemas.bronze.name}
+      serverless: true
+      continuous: false
+      channel: PREVIEW
+      libraries:
+        - glob:
+            include: ../src/pipelines/bakehouse/transformations/**
+      configuration:
+        medallion_catalog: ${var.catalog}
+        bronze_schema: ${resources.schemas.bronze.name}
+        silver_schema: ${resources.schemas.silver.name}
+        gold_schema: ${resources.schemas.gold.name}

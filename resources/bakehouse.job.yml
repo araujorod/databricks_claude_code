@@ -1,0 +1,22 @@
+# Orchestrates the medallion pipeline. The job holds no catalog or schema of
+# its own — it only references the pipeline resource, which carries the
+# environment configuration.
+resources:
+  jobs:
+    bakehouse_medallion_job:
+      name: bakehouse_medallion_job
+      description: Daily refresh of the Bakehouse bronze -> silver -> gold medallion pipeline.
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      trigger:
+        periodic:
+          interval: 1
+          unit: DAYS
+      tasks:
+        - task_key: refresh_medallion
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.bakehouse_medallion.id}
+      email_notifications:
+        on_failure:
+          - araujorod@outlook.com
